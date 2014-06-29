@@ -71,12 +71,13 @@ def logstr_to_loghtml(logfile_str):
 
 def get_html_header():
 
-#    return '<html> <head> <link rel="stylesheet" media="all" \
-#href="/usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css"> </head> \
-#<body> <pre>'
-    return '<html> <head> <link rel="stylesheet" media="screen" \
-href="openerp_log.css"><meta http-equiv="content-Type" content="text/html; charset=utf-8" /> <META HTTP-EQUIV="REFRESH" CONTENT="5;URL=index.html"></head> \
+    return '<html> <head> <link rel="stylesheet" media="all" \
+href="/usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css"> <META HTTP-EQUIV="REFRESH" \
+CONTENT="1;URL=log.html"></head> \
 <body> <pre>'
+#~    return '<html> <head> <link rel="stylesheet" media="screen" \
+#~href="openerp_log.css"><meta http-equiv="content-Type" content="text/html; charset=utf-8" /> <META HTTP-EQUIV="REFRESH" CONTENT="5;URL=log.html"></head> \
+#~<body> <pre>'
 
 
 def get_html_footer():
@@ -85,7 +86,7 @@ def get_html_footer():
 def save_loghtml(logfile_html, outfile):
     dircurrent = commands.getoutput('pwd')
     outfile = dircurrent + '/' + outfile
-    outfile += 'index.html'
+    outfile += 'log.html'
 
     head = get_html_header()
     foot = get_html_footer()
@@ -110,20 +111,21 @@ def main(infile, outfile, num):
 
 def run_server():
     port = '4444'
-    os.system('xdg-open http://localhost:%s/index.html && python -m SimpleHTTPServer %s' % (port,port))
+    os.system('xdg-open http://localhost:%s/log.html && python -m SimpleHTTPServer %s' % (port,port))
 
 def run():
 
     infile, outfile, runserver, port = arguments()
     num = 0
-    print "Loading index.html..."
+    print "Loading log.html..."
     while(True):
         num = main(infile, outfile, num)
         if num == 1:
             time.sleep(1)
-            logging.info('Running...')
-            w = threading.Thread(target=run_server, name='Server')
-            w.start()
+            logging.info('Running log.html...')
+            #w = threading.Thread(target=run_server, name='Server')
+            #w.start()
+            os.system('xdg-open log.html &')
 
 if __name__ == '__main__':
     run()
