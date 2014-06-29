@@ -7,6 +7,9 @@ import threading
 import logging
 import time
 
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s] - %(threadName)-10s: \
+%(message)s')
+
 def arguments():
     parser = argparse.ArgumentParser() 
     parser.add_argument("-lf", "--logfile", help="Path log file", required=True)
@@ -105,7 +108,7 @@ if __name__ == '__main__':
     w = threading.Thread(target=run_server, name='Server')
     w.start()
 
-    print "Running..."
+    logging.info('Running...')
     num = 1
     while(True):
         num = main(num)
