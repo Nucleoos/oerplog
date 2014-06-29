@@ -8,6 +8,6 @@ setup(name='OERPLog',
       author='Yanina Aular',
       author_email='yaniaular@gmail.com',
       url='http://www.yanina.com.ve',
-      py_modules=['oerplog'],
-      #packages=['distutils', 'distutils.command'],
+      packages=['oerplog'],
+      #py_modules=['oerplog'],
      )
