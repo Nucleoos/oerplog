@@ -74,8 +74,8 @@ def get_html_header():
 #    return '<html> <head> <link rel="stylesheet" media="all" \
 #href="/usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css"> </head> \
 #<body> <pre>'
-    return '<html> <head> <link rel="stylesheet" media="all" \
-href="openerp_log.css"> <META HTTP-EQUIV="REFRESH" CONTENT="5;URL=index.html"></head> \
+    return '<html> <head> <link rel="stylesheet" media="screen" \
+href="openerp_log.css"><meta http-equiv="content-Type" content="text/html; charset=utf-8" /> <META HTTP-EQUIV="REFRESH" CONTENT="5;URL=index.html"></head> \
 <body> <pre>'
 
 
@@ -115,12 +115,13 @@ def run_server():
 def run():
 
     infile, outfile, runserver, port = arguments()
-    logging.info('Running...')
     num = 0
+    print "Loading index.html..."
     while(True):
         num = main(infile, outfile, num)
         if num == 1:
-            time.sleep(3)
+            time.sleep(1)
+            logging.info('Running...')
             w = threading.Thread(target=run_server, name='Server')
             w.start()
 
