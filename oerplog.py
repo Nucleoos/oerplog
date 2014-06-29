@@ -3,18 +3,33 @@ import argparse
 import re
 import pdb
 import os
+import threading
+import logging
+import time
 
 def arguments():
     parser = argparse.ArgumentParser() 
     parser.add_argument("-lf", "--logfile", help="Path log file", required=True)
-    parser.add_argument("-o", "--outfile", help="Path HTML out", default='.')
+    parser.add_argument("-o", "--outfile", help="Path HTML out", default='./')
+    parser.add_argument("-r", "--runserver", help="Run Server Localhost")
+    parser.add_argument("-p", "--port", help="Server Port", default='3333')
     args = parser.parse_args()
+
+    runserver = False
+
     if( args.logfile is None):
         print "Must be specified a path with log file"
         quit()
+
+    if(args.runserver != None):
+        outfile = './'
+        runserver = True
+    else:
+        outfile = args.outfile
+
     infile = args.logfile
-    outfile = args.outfile
-    return infile, outfile
+    port = args.port
+    return infile, outfile, runserver, port
 
 def open_logfile(infile):
 
@@ -67,11 +82,32 @@ def save_loghtml(logfile_html, outfile):
         f.close()
 
 def get_openerp_log_css(outfile):
-    os.system('cp openerp_log.css %s' % outfile)
+    #os.system('cp openerp_log.css %s' % outfile)
+    pass
 
-if __name__ == '__main__':
-    infile, outfile = arguments()
+def main(num):
+    time.sleep(5)
+    print "\nCarga %s" % num
+    print "Procesando..."
+    infile, outfile, runserver, port = arguments()
     logfile_str = open_logfile(infile)
     logfile_html = logstr_to_loghtml(logfile_str)
     res = save_loghtml(logfile_html, outfile)
     get_openerp_log_css(outfile)
+    print "Listo.\n"
+    return num + 1
+
+def run_server():
+    port = '3000'
+    os.system('xdg-open http://localhost:%s/index.html && python -m SimpleHTTPServer %s' % (port,port))
+
+if __name__ == '__main__':
+
+    w = threading.Thread(target=run_server, name='Server')
+    w.start()
+
+    num = 1
+    while(True):
+        num = main(num)
+    
+
