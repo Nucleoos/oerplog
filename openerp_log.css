@@ -1,0 +1,7 @@
+b, .info {color: green; background-color : black;}
+b, .warning {color: yellow; background-color : black;}
+b, .error {color: red; background-color : black;}
+b, .test {color: white; background-color : blue;}
+b, .critical {color: white; background-color : red;}
+b, .debug {color: blue; background-color : black;}
+body {background-color: black; color: white;}
