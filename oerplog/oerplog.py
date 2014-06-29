@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] - %(threadName)-
 def arguments():
     parser = argparse.ArgumentParser() 
     parser.add_argument("-lf", "--logfile", help="Path log file", required=True)
-    parser.add_argument("-o", "--outfile", help="Path HTML out", default='./')
+    parser.add_argument("-o", "--outfile", help="Path HTML out", default='/home/yanina/')
     parser.add_argument("-r", "--runserver", help="Run Server Localhost")
     parser.add_argument("-p", "--port", help="Server Port", default='4444')
     args = parser.parse_args()
@@ -69,43 +69,32 @@ def logstr_to_loghtml(logfile_str):
 
 def get_html_header():
 
-    #return '<html> <head> <link rel="stylesheet" media="all" href="openerp_log.css"> </head>\
-    #        <body> <pre>'
-    return '<html> \n <head> \n <style>\
-b, .info {color: green; background-color : black;}\n\
-b, .warning {color: yellow; background-color : black;}\n\
-b, .error {color: red; background-color : black;}\n\
-b, .test {color: white; background-color : blue;}\n\
-b, .critical {color: white; background-color : red;}\n\
-b, .debug {color: blue; background-color : black;}\n\
-body {background-color: black; color: white;}\n\
-            </style></head> \n <body background-color="black"> \n <pre>'
+    return '<html> <head> <link rel="stylesheet" media="all"\
+    href="/usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css"> </head>\
+            <body> <pre>'
 
 def get_html_footer():
-
-    return '\n</pre> \n</body>\n </html>'
+    return '</pre> </body> </html>'
 
 def save_loghtml(logfile_html, outfile):
     outfile += 'index.html'
 
     head = get_html_header()
     foot = get_html_footer()
-
     with open(outfile, 'w') as f:
         f.write(head + logfile_html + foot)
         f.close()
 
 def get_openerp_log_css(outfile):
-    #os.system('cp openerp_log.css %s' % outfile)
+    os.system('cp /usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css %s' % outfile)
     pass
 
-def main(num):
+def main(infile, outfile, num):
     time.sleep(5)
-    infile, outfile, runserver, port = arguments()
     logfile_str = open_logfile(infile)
     logfile_html = logstr_to_loghtml(logfile_str)
     res = save_loghtml(logfile_html, outfile)
-    get_openerp_log_css(outfile)
+    #get_openerp_log_css(outfile)
     return num + 1
 
 def run_server():
@@ -116,10 +105,11 @@ def run():
     w = threading.Thread(target=run_server, name='Server')
     w.start()
 
+    infile, outfile, runserver, port = arguments()
     logging.info('Running...')
     num = 1
     while(True):
-        num = main(num)
+        num = main(infile, outfile, num)
 
 if __name__ == '__main__':
     run()

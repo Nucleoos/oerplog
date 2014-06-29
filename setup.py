@@ -10,6 +10,10 @@ setup(name='OERPLog',
       url='http://www.yanina.com.ve',
       packages=['oerplog'],
       scripts=['bin/oerplog'],
+      package_data={'oerplog': [
+            'openerp_log.css',
+          ]},
+
 #~      entry_points="""
 #~      [console_scripts]
 #~      oerplog=oerplog.oerplog:run
