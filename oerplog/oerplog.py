@@ -6,6 +6,7 @@ import os
 import threading
 import logging
 import time
+import commands
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] - %(threadName)-10s: \
 %(message)s')
@@ -13,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] - %(threadName)-
 def arguments():
     parser = argparse.ArgumentParser() 
     parser.add_argument("-lf", "--logfile", help="Path log file", required=True)
-    parser.add_argument("-o", "--outfile", help="Path HTML out", default='/home/yanina/')
+    parser.add_argument("-o", "--outfile", help="Path HTML out", default='./')
     parser.add_argument("-r", "--runserver", help="Run Server Localhost")
     parser.add_argument("-p", "--port", help="Server Port", default='4444')
     args = parser.parse_args()
@@ -37,7 +38,8 @@ def arguments():
     return infile, outfile, runserver, port
 
 def open_logfile(infile):
-
+    dircurrent = commands.getoutput('pwd')
+    dircurrent = dircurrent + '/' + infile
     with open(infile, 'r') as f:
         logfile_str = f.read()
         f.close()
@@ -69,14 +71,20 @@ def logstr_to_loghtml(logfile_str):
 
 def get_html_header():
 
-    return '<html> <head> <link rel="stylesheet" media="all"\
-    href="/usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css"> </head>\
-            <body> <pre>'
+#    return '<html> <head> <link rel="stylesheet" media="all" \
+#href="/usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css"> </head> \
+#<body> <pre>'
+    return '<html> <head> <link rel="stylesheet" media="all" \
+href="openerp_log.css"> <META HTTP-EQUIV="REFRESH" CONTENT="5;URL=index.html"></head> \
+<body> <pre>'
+
 
 def get_html_footer():
     return '</pre> </body> </html>'
 
 def save_loghtml(logfile_html, outfile):
+    dircurrent = commands.getoutput('pwd')
+    outfile = dircurrent + '/' + outfile
     outfile += 'index.html'
 
     head = get_html_header()
@@ -86,15 +94,18 @@ def save_loghtml(logfile_html, outfile):
         f.close()
 
 def get_openerp_log_css(outfile):
+    dircurrent = commands.getoutput('pwd')
+    outfile = dircurrent + '/' + outfile
     os.system('cp /usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css %s' % outfile)
     pass
 
 def main(infile, outfile, num):
-    time.sleep(5)
     logfile_str = open_logfile(infile)
     logfile_html = logstr_to_loghtml(logfile_str)
+    time.sleep(5)
     res = save_loghtml(logfile_html, outfile)
-    #get_openerp_log_css(outfile)
+    if num == 0:
+        get_openerp_log_css(outfile)
     return num + 1
 
 def run_server():
@@ -102,14 +113,16 @@ def run_server():
     os.system('xdg-open http://localhost:%s/index.html && python -m SimpleHTTPServer %s' % (port,port))
 
 def run():
-    w = threading.Thread(target=run_server, name='Server')
-    w.start()
 
     infile, outfile, runserver, port = arguments()
     logging.info('Running...')
-    num = 1
+    num = 0
     while(True):
         num = main(infile, outfile, num)
+        if num == 1:
+            time.sleep(3)
+            w = threading.Thread(target=run_server, name='Server')
+            w.start()
 
 if __name__ == '__main__':
     run()
