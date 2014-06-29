@@ -69,12 +69,21 @@ def logstr_to_loghtml(logfile_str):
 
 def get_html_header():
 
-    return '<html> <head> <link rel="stylesheet" media="all" href="openerp_log.css"> </head>\
-            <body> <pre>'
+    #return '<html> <head> <link rel="stylesheet" media="all" href="openerp_log.css"> </head>\
+    #        <body> <pre>'
+    return '<html> \n <head> \n <style>\
+b, .info {color: green; background-color : black;}\n\
+b, .warning {color: yellow; background-color : black;}\n\
+b, .error {color: red; background-color : black;}\n\
+b, .test {color: white; background-color : blue;}\n\
+b, .critical {color: white; background-color : red;}\n\
+b, .debug {color: blue; background-color : black;}\n\
+body {background-color: black; color: white;}\n\
+            </style></head> \n <body background-color="black"> \n <pre>'
 
 def get_html_footer():
 
-    return '</pre> </body> </html>'
+    return '\n</pre> \n</body>\n </html>'
 
 def save_loghtml(logfile_html, outfile):
     outfile += 'index.html'
