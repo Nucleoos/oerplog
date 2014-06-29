@@ -12,23 +12,25 @@ def arguments():
     parser.add_argument("-lf", "--logfile", help="Path log file", required=True)
     parser.add_argument("-o", "--outfile", help="Path HTML out", default='./')
     parser.add_argument("-r", "--runserver", help="Run Server Localhost")
-    parser.add_argument("-p", "--port", help="Server Port", default='3333')
+    parser.add_argument("-p", "--port", help="Server Port", default='4444')
     args = parser.parse_args()
 
-    runserver = False
+    #runserver = False
 
     if( args.logfile is None):
         print "Must be specified a path with log file"
         quit()
 
-    if(args.runserver != None):
-        outfile = './'
-        runserver = True
-    else:
-        outfile = args.outfile
+    #~if(args.runserver != None):
+    #~    outfile = './'
+    #~    runserver = True
+    #~else:
+    #~    outfile = args.outfile
 
     infile = args.logfile
+    outfile = args.outfile
     port = args.port
+    runserver = True
     return infile, outfile, runserver, port
 
 def open_logfile(infile):
@@ -87,18 +89,15 @@ def get_openerp_log_css(outfile):
 
 def main(num):
     time.sleep(5)
-    print "\nCarga %s" % num
-    print "Procesando..."
     infile, outfile, runserver, port = arguments()
     logfile_str = open_logfile(infile)
     logfile_html = logstr_to_loghtml(logfile_str)
     res = save_loghtml(logfile_html, outfile)
     get_openerp_log_css(outfile)
-    print "Listo.\n"
     return num + 1
 
 def run_server():
-    port = '3000'
+    port = '4444'
     os.system('xdg-open http://localhost:%s/index.html && python -m SimpleHTTPServer %s' % (port,port))
 
 if __name__ == '__main__':
@@ -106,8 +105,7 @@ if __name__ == '__main__':
     w = threading.Thread(target=run_server, name='Server')
     w.start()
 
+    print "Running..."
     num = 1
     while(True):
         num = main(num)
-    
-
