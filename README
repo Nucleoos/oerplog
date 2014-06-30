@@ -1,0 +1,12 @@
+Simple execution:
+    oerplog -lf <PATH-LOG>
+
+Example:
+    oerplog -lf openerp-server.log
+
+openerp-server.log is a file generates by openerp server.
+you can add to openerp server command the argument:
+--logfile=<PATH-LOG>
+
+Example:
+--logfile=/home/openerp/logs/openerp-server.log
