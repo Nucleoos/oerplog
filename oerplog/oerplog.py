@@ -44,6 +44,11 @@ def arguments():
     return infile, outfile, runserver, port
 
 def open_logfile(infile):
+    """
+    open_logfile method is responsible for to open log file and returns its content 
+    @param infile: Path of OpenERP Log File
+    return: content of log file 
+    """
     dircurrent = commands.getoutput('pwd')
     dircurrent = dircurrent + '/' + infile
     with open(infile, 'r') as f:
@@ -52,6 +57,12 @@ def open_logfile(infile):
     return logfile_str
 
 def logstr_to_loghtml(logfile_str):
+    """
+    logstr_to_loghtml methos is responsible for to convert logfile_str to code html. In other words,
+    Should add color to log messages
+    @param logfile_str: content of log file
+    @return: content of log file in HTML format
+    """
 
     logfile_html = logfile_str
 
@@ -76,6 +87,11 @@ def logstr_to_loghtml(logfile_str):
     return logfile_html
 
 def get_html_header(runserver):
+    """
+    Get Header of log.html file
+    @param runserver: It's True when a server is activated
+    @return: header of html
+    """
 
     if runserver: 
         return '<html> <head> <link rel="stylesheet" media="screen" \
@@ -89,9 +105,20 @@ def get_html_header(runserver):
 
 
 def get_html_footer():
+    """
+    Get footer of log.html file
+    @return: footer of html
+    """
     return '</pre> </body> </html>'
 
 def save_loghtml(logfile_html, outfile, runserver):
+    """
+    save_loghtml method is responsible for to export HTML file for display log in browser
+    @param logfile_html: content of log file in HTML format
+    @param outfile: Path of out file
+    @param runserver: It's True when a server is activated
+    @return True is Okay
+    """
     dircurrent = commands.getoutput('pwd')
     outfile = dircurrent + '/' + outfile
     outfile += 'log.html'
@@ -101,14 +128,28 @@ def save_loghtml(logfile_html, outfile, runserver):
     with open(outfile, 'w') as f:
         f.write(head + logfile_html + foot)
         f.close()
+    return True
 
 def get_openerp_log_css(outfile):
+    """
+    Copy css file in path out file, just if runserver is True
+    @param outfile: Path of out file
+    @return True
+    """
     dircurrent = commands.getoutput('pwd')
     outfile = dircurrent + '/' + outfile
     os.system('cp /usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css %s' % outfile)
-    pass
+    return True
 
 def main(infile, outfile, runserver, num):
+    """
+    Each 3 seconds log.html is load again 
+    @param infile: Path of OpenERP Log File
+    @param outfile: Path of out file
+    @param runserver: It's True when a server is activated
+    @param num: Control Number
+    @return counter
+    """
     if num != 0:
         time.sleep(3)
     logfile_str = open_logfile(infile)
@@ -119,10 +160,18 @@ def main(infile, outfile, runserver, num):
     return num + 1
 
 def run_server(port):
+    """
+    Run Server HTTP
+    @param port: Server Port
+    @return True
+    """
     os.system('python -m SimpleHTTPServer %s' % (port))
+    return True
 
 def run():
-
+    """
+    Infinite cycle for review changes in OpenERP log file and update browser
+    """
     infile, outfile, runserver, port = arguments()
     w = threading.Thread(target=run_server, name='Server', args=(port, ) )
     num = 0
