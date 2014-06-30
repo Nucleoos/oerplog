@@ -100,7 +100,7 @@ def get_html_header(runserver):
     else:
         return '<html> <head> <link rel="stylesheet" media="all" \
         href="/usr/local/lib/python2.7/dist-packages/oerplog/openerp_log.css"> <META HTTP-EQUIV="REFRESH" \
-        CONTENT="1;URL=log.html"></head> \
+        CONTENT="4;URL=log.html"></head> \
         <body> <pre>'
 
 
