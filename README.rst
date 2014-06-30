@@ -39,7 +39,6 @@ Complicate Execution 2:
     oerplog -lf <PATH-LOG> -r True -p 8000
 
 Example:
-
     oerplog -lf openerp-server.log -r True -p 8000
 
 Will be runed a simple http server in port 8000. The out files will be stored in './' ever.
