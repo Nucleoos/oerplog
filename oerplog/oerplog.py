@@ -8,14 +8,18 @@ import logging
 import time
 import commands
 
+#A logging is created for display messages about server, if exists
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] - %(threadName)-10s: \
 %(message)s')
 
 def arguments():
+    """
+    arguments method is responsible for extracting arguments required by the user
+    """
     parser = argparse.ArgumentParser() 
     parser.add_argument("-lf", "--logfile", help="Path log file", required=True)
     parser.add_argument("-o", "--outfile", help="Path HTML out", default='./')
-    parser.add_argument("-r", "--runserver", help="Run Server Localhost", default=False)
+    parser.add_argument("-r", "--runserver", type=bool, help="Run Server Localhost", default=False)
     parser.add_argument("-p", "--port", help="Server Port", default='4444')
     args = parser.parse_args()
 
@@ -23,14 +27,18 @@ def arguments():
         print "Must be specified a path with log file"
         quit()
 
-    #~if(args.runserver != None):
-    #~    outfile = './'
-    #~    runserver = True
-    #~else:
-    #~    outfile = args.outfile
+    if( args.runserver not in (True, False) ):
+        print "The argument runserver must be True or False"
+        quit()
+
+    if(args.runserver):
+        outfile = './'
+        if( args.outfile != './' or args.outfile != '.'):
+            print "The outfile argument is ignored when runserver argument is True"
+    else:
+        outfile = args.outfile
 
     infile = args.logfile
-    outfile = args.outfile
     port = args.port
     runserver = args.runserver
     return infile, outfile, runserver, port
